@@ -5,13 +5,15 @@
 // TODO mb use sstream
 void fromHex(char* dest, const char* src)
 {
+    auto checkHexChar = [](char c)
+    { return c < '0' || ('9' < c  && c < 'a') || 'f' > c; };
     char buf[3] = {0, 0, 0};
     while (*src)
     {
         buf[0] = *src++;
-        if (!*src)
-            throw std::invalid_argument("Wrong data format");
         buf[1] = *src++;
+        if (!checkHexChar(buf[0]) || !checkHexChar(buf[1]))
+            throw std::invalid_argument("Wrong data format");
         unsigned int temp;
         std::sscanf(buf, "%x", &temp);
         *dest++ = temp;
